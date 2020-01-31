@@ -8,6 +8,7 @@ const initialColor = {
 
 const ColorList = ({ colors, updateColors }) => {
   console.log(colors, "color comp")
+  const [newColor, setNewColor] = useState()
   const [editing, setEditing] = useState(false)
   const [colorToEdit, setColorToEdit] = useState(initialColor)
 
@@ -15,6 +16,8 @@ const ColorList = ({ colors, updateColors }) => {
     setEditing(true)
     setColorToEdit(color)
   }
+
+  // Add
 
   // Update
   const saveEdit = e => {
