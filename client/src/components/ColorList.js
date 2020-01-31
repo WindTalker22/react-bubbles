@@ -8,7 +8,7 @@ const initialColor = {
 
 const ColorList = ({ colors, updateColors }) => {
   console.log(colors, "color comp")
-  const [newColor, setNewColor] = useState()
+  const [colorToAdd, setColorToAdd] = useState(initialColor)
   const [editing, setEditing] = useState(false)
   const [colorToEdit, setColorToEdit] = useState(initialColor)
 
@@ -18,6 +18,16 @@ const ColorList = ({ colors, updateColors }) => {
   }
 
   // Add
+  const addColor = e => {
+    e.preventDefault()
+    axiosWithAuth()
+      .post("/api/colors", colorToAdd)
+      .then(res => {
+        updateColors(res.data)
+        setColorToAdd(initialColor)
+      })
+      .catch(err => console.log(err))
+  }
 
   // Update
   const saveEdit = e => {
@@ -26,7 +36,7 @@ const ColorList = ({ colors, updateColors }) => {
     // think about where will you get the id from...
     // where is is saved right now?
     axiosWithAuth()
-      .put(`http://localhost:5000/api/colors/${colorToEdit.id}`, colorToEdit)
+      .put(`/api/colors/${colorToEdit.id}`, colorToEdit)
       .then(res => {
         console.log(res, "Axios Put")
         refresher()
@@ -114,6 +124,35 @@ const ColorList = ({ colors, updateColors }) => {
           <div className="button-row">
             <button type="submit">save</button>
             <button onClick={() => setEditing(false)}>cancel</button>
+          </div>
+        </form>
+      )}
+      {!editing && (
+        <form onSubmit={addColor}>
+          <legend>add color</legend>
+          <label>
+            color name:
+            <input
+              onChange={e =>
+                setColorToAdd({ ...colorToAdd, color: e.target.value })
+              }
+              value={colorToAdd.color}
+            />
+          </label>
+          <label>
+            hex code:
+            <input
+              onChange={e =>
+                setColorToAdd({
+                  ...colorToAdd,
+                  code: { hex: e.target.value }
+                })
+              }
+              value={colorToAdd.code.hex}
+            />
+          </label>
+          <div className="button-row">
+            <button type="submit">add</button>
           </div>
         </form>
       )}
