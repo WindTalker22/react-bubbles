@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react"
-import axios from "axios"
+import React, { useState } from "react"
 import { axiosWithAuth } from "../utils/axiosWithAuth"
 
 const Login = props => {
@@ -15,14 +14,15 @@ const Login = props => {
   // POST request
   const login = e => {
     e.preventDefault()
-    axios
+    axiosWithAuth()
       .post("http://localhost:5000/api/login", credentials)
       .then(res => {
-        console.log(res, "Hi from the POST then")
         localStorage.setItem("token", res.data.payload)
+        props.history.push("/bubble-page")
+        console.log(res, "Axios Post")
       })
       .catch(err => {
-        console.log(err, "Hi from the POST err")
+        console.log(err, "Axios Post")
       })
   }
 
